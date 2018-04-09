@@ -70,7 +70,7 @@ function errCallback(e) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-function request(url, options) {
+function fetchData(url, options) {
     return fetch(url, options)
         .then(checkStatus)
         .then(parseJSON)
@@ -85,7 +85,7 @@ function request(url, options) {
  */
 
 export const post = (url, params = {}) => {
-    return request(url, {
+    return fetchData(url, {
         method: 'POST',
         body: JSON.stringify(params)
     });
@@ -97,7 +97,7 @@ export const post = (url, params = {}) => {
  * @param params    接口参数
  */
 export const get = url => {
-    return request(url);
+    return fetchData(url);
 };
 
 /**
@@ -106,6 +106,6 @@ export const get = url => {
  * @param params   search参数
  * @param data     data参数
  */
-export const fetchData = ({fnName, params, data}) => {
-    http[fnName](params, data);
+export const request = ({fnName, params, data}) => {
+    return http[fnName](params, data);
 }; 

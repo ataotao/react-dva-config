@@ -12,6 +12,11 @@ export default {
             changeOrigin: true,
             pathRewrite: { '^/api': '/api' }
         }
+        // '/api/user': {
+        //     target: 'https://dev.q.sopei.cn',
+        //     changeOrigin: true,
+        //     pathRewrite: { '^/api/user': '/api/user' }
+        // }
     },
 
     theme: {

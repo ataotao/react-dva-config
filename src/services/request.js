@@ -15,6 +15,7 @@ const createUrl = (api, params) => {
 /**
  * get
  */
+export const users = () => get(createUrl(api.users));
 export const infoMine = params => get(createUrl(api.info_mine, params));
 
 /**

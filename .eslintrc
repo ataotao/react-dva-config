@@ -1,11 +1,17 @@
 {
-  "extends": ["umi", "eslint:recommended"],
-  "rules": {
-      "no-debugger": 0,
-      "indent": ["warn", 4, { "SwitchCase": 1 }],
-      "no-console": ["off"],
-      "quotes": ["warn", "single"],
-      "semi": ["error", "always"],
-      "react/prop-types": 0
-  }
+    "extends": ["umi", "eslint:recommended"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "commonjs": true,
+        "node": true
+    },
+    "rules": {
+        "no-debugger": 0,
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "no-console": ["off"],
+        "quotes": ["warn", "single"],
+        "semi": ["error", "always"],
+        "react/prop-types": 0
+    }
 }
