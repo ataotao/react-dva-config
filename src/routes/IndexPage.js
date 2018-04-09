@@ -1,18 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './IndexPage.css';
-import { request } from '../services';
+// import { request } from '../services';
 
 
 async function test() {
-    console.log(1);
-    let d = await request({fnName:'infoMine'});
-    console.log(d);
-}
-
-test();
-
-function IndexPage() {
+    // console.log(1);
+    // let d = await request({fnName:'infoMine'});
+    // console.log(d);
     // http调用实例
     // let params = {
     //     tenant_id:'370763113544693760',
@@ -26,8 +21,15 @@ function IndexPage() {
     //     cm_model:'Orochi [大蛇]',
     //     appId:'wxd47a4e2027a28b55'
     // };
-    // request({fnName:'infoMine', params});
-    // request({fnName:'queryFeedback', params, data});
+    // let infoMine = await request({fnName:'infoMine', params});
+    // let queryFeedback = await request({fnName:'queryFeedback', params, data});
+    // console.log(infoMine);
+    // console.log(queryFeedback);
+}
+
+test();
+
+function IndexPage() {
 
     return (
         <div className={styles.normal}>

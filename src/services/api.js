@@ -1,8 +1,8 @@
 /**
  * 接口地址配置文件
  */
-// const apiUser = '/api/user/v1.0/';
-const apiUser = '/mock/';
+const apiUser = '/api/user/v1.0/';
+// const apiUser = '/mock/';
 
 //接口地址
 export const users = apiUser + 'users';

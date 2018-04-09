@@ -12,11 +12,12 @@
 - /routes 路由页面
 - /components 组件页面
 - /models 数据模型
-- /services api接口
-- /utils/request.js： http封装
+- /services http封装以及api接口
+- /utils  通用工具
 - /index.js 入口文件
 - /router.js 一级路由配置
 - /index.css 全局样式配置
+- /mock 模拟接口
 
 ### babel-plugin-import 是用来按需加载 antd 的脚本和样式
 ```
@@ -143,4 +144,9 @@ function RouterConfig({ history, app }) {
 }
 export default RouterConfig;
 
+```
+
+### Redux connect参数
+```
+connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 ```

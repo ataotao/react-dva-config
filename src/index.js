@@ -16,7 +16,7 @@ const onError = (err, dispatch) => {
 
 // state 改变时触发，可用于同步 state 到 localStorage，服务器端等。
 const onStateChange = app => {
-    console.log(app);
+    // console.log(app);
 };
 
 // 1. Initialize
