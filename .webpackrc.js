@@ -8,9 +8,9 @@ export default {
 
     proxy: {
         '/api': {
-            target: 'https://portal.sopei.cn/',
+            target: 'https://dev.q.sopei.cn',
             changeOrigin: true,
-            pathRewrite: { '^/api': '' }
+            pathRewrite: { '^/api': '/api' }
         }
     },
 
