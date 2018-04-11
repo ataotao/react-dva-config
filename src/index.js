@@ -1,6 +1,6 @@
 import dva from 'dva';
 import Router from './router';
-import './index.css';
+import './index.less';
 
 import { message } from 'antd';
 import { createLogger } from 'redux-logger';
@@ -23,7 +23,7 @@ const onStateChange = app => {
 let initialState = {}; // 可定义一些初始化数据
 let initConfig = { onError, onStateChange, initialState, onAction: [] };
 if (process.env.NODE_ENV !== 'production') {
-    initConfig.onAction.push(createLogger());
+    initConfig.onAction.push(createLogger({collapsed: true}));
 }
 const app = dva(initConfig);
 

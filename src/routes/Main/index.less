@@ -1,0 +1,45 @@
+// @media screen and (max-width: @screen-xs) {
+// }
+
+// @media screen and (max-width: @screen-sm) {
+// }
+
+// @media screen and (max-width: @screen-md) {
+// }
+
+// @media screen and (max-width: @screen-lg) and (min-width: @screen-md) {
+// }
+
+// @media screen and (max-width: @screen-xl) {
+// }
+
+// @media screen and (max-width: 1400px) {
+// }
+@import '~antd/lib/style/themes/default.less';
+
+.sider {
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+}
+.header {
+    background: #fff;
+    padding: 0;
+}
+.content {
+    margin: 24px 16px;
+    padding: 24;
+    background: #fff;
+    min-height: 280;
+}
+
+i.trigger {
+    font-size: 20px;
+    line-height: 64px;
+    transition: all 0.3s, padding 0s;
+    padding: 0 24px;
+    &:hover {
+        background: @primary-1;
+    }
+}

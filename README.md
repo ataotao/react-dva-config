@@ -150,3 +150,14 @@ export default RouterConfig;
 ```
 connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 ```
+
+## eslint验证(没有加入build时的验证，只是编写代码时验证)
+```
+// 某些文件关闭eslint检查
+/*eslint-disable*/
+function test() {
+   return true
+ }
+// 给某一行js代码关闭eslint检查
+// eslint-disable-next-line
+alert('foo')
