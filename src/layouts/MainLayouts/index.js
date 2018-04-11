@@ -5,12 +5,11 @@ import DocumentTitle from 'react-document-title';
 import { enquireScreen } from 'enquire-js';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
+
 import { getMenuData } from '../../common/menu';
-
-import styles from './index.less';
-
-import NotFound from '../Exception/404';
+import NotFound from '../../routes/Exception/404';
 import SiderMenu from '../../components/SiderMenu';
+import styles from './index.less';
 
 const { Header, Sider, Content } = Layout;
 
@@ -55,11 +54,10 @@ class Main extends Component {
     getPageTitle() {
         const { routerData, location } = this.props;
         const { pathname } = location;
-        const routerMain = routerData['main'];
         let title = '搜配 - 审核后台';
-        for (let i = 0; i < routerMain.length; i++) {
-            if(routerMain[i].path == pathname){
-                title = `${routerMain[i].name} - 搜配`;
+        for (let i = 0; i < routerData.length; i++) {
+            if(routerData[i].path == pathname){
+                title = `${routerData[i].name} - 搜配`;
                 break;
             }
         }
@@ -89,7 +87,6 @@ class Main extends Component {
 
     render() {
         const { routerData } = this.props;
-        const mainRoutes = routerData['main'];
         const clsSider = classNames(styles.sider);
         const layout = <Layout>
             {/* 侧边栏 */}
@@ -106,7 +103,7 @@ class Main extends Component {
                 <Content className={styles.content}>
                     <Switch>
                         <Route exact path="/" render={() => <Redirect push to="/standardmodel/review" />} /> 
-                        {mainRoutes.map((item, index) => (
+                        {routerData.map((item, index) => (
                             <Route path={item.path} exact component={item.component} key={index} />
                         ))}
                         <Route render={NotFound} />
@@ -127,36 +124,3 @@ class Main extends Component {
 }
 
 export default Main;
-
-
-{/* {
-    getMenuData().map((menu, index) => {
-        return (
-            <div>
-                <Item key={index}>
-                    <Icon type="user" />
-                    <span>{menu.name}</span>
-                </Item>
-                <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-                    <Item key="5">Option 5</Item>
-                    <Menu.Item key="6">Option 6</Menu.Item>
-                    <Menu.Item key="7">Option 7</Menu.Item>
-                    <Menu.Item key="8">Option 8</Menu.Item>
-                </SubMenu>
-            </div>
-        );
-    })
-} */}
-
-{/* <Menu.Item key="1">
-    <Icon type="user" />
-    <span>nav 1</span>
-</Menu.Item>
-<Menu.Item key="2">
-    <Icon type="video-camera" />
-    <span>nav 2</span>
-</Menu.Item>
-<Menu.Item key="3">
-    <Icon type="upload" />
-    <span>nav 3</span>
-</Menu.Item> */}
