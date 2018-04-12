@@ -11,6 +11,7 @@
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "enquire-js": "^0.2.1",
+    "rc-drawer-menu": "^0.5.7",
     "react": "^16.2.0",
     "react-container-query": "^0.11.0",
     "react-document-title": "^2.0.3",

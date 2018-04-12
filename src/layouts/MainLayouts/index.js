@@ -5,13 +5,13 @@ import DocumentTitle from 'react-document-title';
 import { enquireScreen } from 'enquire-js';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
-
+import { connect } from 'dva';
 import { getMenuData } from '../../common/menu';
 import NotFound from '../../routes/Exception/404';
 import SiderMenu from '../../components/SiderMenu';
 import styles from './index.less';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 let isMobile;
 enquireScreen(b => {
@@ -41,17 +41,10 @@ const query = {
 
 class Main extends Component {
     state = {
-        isMobile,
-        collapsed: false
+        isMobile
     };
 
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed
-        });
-    };
-
-    getPageTitle() {
+    getPageTitle = ()=> {
         const { routerData, location } = this.props;
         const { pathname } = location;
         let title = '搜配 - 审核后台';
@@ -62,7 +55,14 @@ class Main extends Component {
             }
         }
         return title;
-    }
+    };
+
+    handleMenuCollapse = collapsed => {
+        this.props.dispatch({
+            type: 'main/changeMainLayoutCollapsed',
+            payload: collapsed,
+        });
+    };
 
     componentWillReceiveProps(nextProps) {
         // console.log('componentWillReceiveProps');
@@ -83,22 +83,24 @@ class Main extends Component {
 
     componentDidMount() {
         // console.log('componentDidMount');
+        enquireScreen(mobile => {
+            this.setState({
+                isMobile: mobile,
+            });
+        });
     }
 
     render() {
-        const { routerData } = this.props;
-        const clsSider = classNames(styles.sider);
+        const { routerData, collapsed, location } = this.props;
+        const { isMobile } = this.state;
+        let LayoutStyle = !isMobile ? {'marginLeft': collapsed ? 80 : 200} : {};
         const layout = <Layout>
             {/* 侧边栏 */}
-            <Sider trigger={null} collapsible collapsed={this.state.collapsed} className={clsSider} breakpoint="lg"
-                collapsedWidth="80" onCollapse={(collapsed, type) => { console.log(collapsed, type); }}>
-                <div className="logo"> logo</div>
-                <SiderMenu  {...this.props} menuData={getMenuData()}  collapsed={this.props.isMobile ? false : this.props.collapsed}/>
-            </Sider>
+            <SiderMenu menuData={getMenuData()} collapsed={collapsed} location={location} isMobile={isMobile} onCollapse={this.handleMenuCollapse}/>
             {/* 右侧布局 */}
-            <Layout style={{ marginLeft: this.state.collapsed ? 80 : 200 }}>
+            <Layout style={LayoutStyle}>
                 <Header className={styles.header}>
-                    <Icon className={classNames(styles.trigger, 'cur')} type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} onClick={this.toggle} />
+                    <Icon className={classNames(styles.trigger, 'cur')} type={collapsed ? 'menu-unfold' : 'menu-fold'} onClick={()=>this.handleMenuCollapse(!collapsed)} />
                 </Header>
                 <Content className={styles.content}>
                     <Switch>
@@ -123,4 +125,5 @@ class Main extends Component {
     }
 }
 
-export default Main;
+const mapStateToProps = ({ main }) => ({ collapsed: main.collapsed });
+export default connect(mapStateToProps)(Main);

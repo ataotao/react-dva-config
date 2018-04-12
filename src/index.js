@@ -6,8 +6,8 @@ import { message } from 'antd';
 import { createLogger } from 'redux-logger';
 import createLoading from 'dva-loading';
 
-import Example from './models/example';
-const models = [Example];
+import GlobalModel from './models/global';
+const models = [GlobalModel];
 
 // 全局错误处理
 const onError = (err, dispatch) => {
@@ -15,8 +15,8 @@ const onError = (err, dispatch) => {
 };
 
 // state 改变时触发，可用于同步 state 到 localStorage，服务器端等。
-const onStateChange = app => {
-    // console.log(app);
+const onStateChange = state => {
+    // console.log(state);
 };
 
 // 1. Initialize
