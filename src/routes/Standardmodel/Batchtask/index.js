@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class index extends Component {
+class Batchtask extends Component {
     render() {
         return (
             <div>
@@ -10,4 +10,4 @@ class index extends Component {
     }
 }
 
-export default index;
+export default Batchtask;

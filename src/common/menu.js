@@ -17,9 +17,9 @@ const menuData = [
         ]
     },
     {
-        name: '单项',
+        name: '数据导入',
         icon: 'dashboard',
-        path: 'standardmodel1'
+        path: 'dataimport'
     },
     {
         name: '其他',
@@ -59,3 +59,5 @@ function formatter(data, parentPath = '/', parentAuthority) {
 }
 
 export const getMenuData = () => formatter(menuData);
+
+export const rawMenu = [...menuData];

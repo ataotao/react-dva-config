@@ -1,8 +1,58 @@
-import fetch from 'dva/fetch';
+import axios from 'axios';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import * as http from './request';
 import app from '../index';
+// import { isEmpty } from '../utils/tools';
+
+// axios 配置
+axios.defaults.timeout = 50000;
+axios.defaults.baseURL = '/api/platform/v1.0/';
+// 跨域配置
+axios.defaults.withCredentials = true;
+
+// 拦截器
+axios.interceptors.request.use(
+    config => config,
+    error => Promise.reject(error)
+);
+
+axios.interceptors.response.use(
+    async response => {
+        // 开发环境
+        if (process.env.NODE_ENV !== 'production') {
+            console.groupCollapsed(`response info: ${response.config.url}`);
+            console.log(
+                '%c request url',
+                'color: #9E9E9E; font-weight: bold',
+                response.config.url + ' => state:' + response.status
+            );
+            console.log(
+                '%c request params',
+                'color: #4CAF50; font-weight: bold',
+                response.config.params
+            );
+            if (response.config.data) {
+                console.log(
+                    '%c request data',
+                    'color: #ACF9BF; font-weight: bold',
+                    response.config.data
+                );
+            }
+            console.log(
+                '%c response data',
+                'color: #03A9F4; font-weight: bold',
+                response.data
+            );
+            console.groupEnd();
+        }
+
+        return response;
+    },
+    error => {
+        return Promise.resolve(error.response);
+    }
+);
 
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -22,23 +72,34 @@ const codeMessage = {
     504: '网关超时。'
 };
 
-function parseJSON(response) {
-    return response.json();
-}
-
 function checkStatus(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return response;
+    if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
+        return checkLogin(response.data);
     }
     const errortext = codeMessage[response.status] || response.statusText;
     notification.error({
-        message: `请求错误 ${response.status}: ${response.url}`,
+        message: `请求错误 ${response.status}: ${response.config.url}`,
         description: errortext
     });
     const error = new Error(errortext);
+    error.code = -1;
+    error.msg = errortext;
     error.name = response.status;
     error.response = response;
     throw error;
+}
+
+function checkLogin(res) {
+    const { dispatch } = app._store;
+    if(res.code == 21001) {
+        dispatch(routerRedux.push('/user/login'));
+        notification.error('请重新登录');
+        return {
+            code: -1,
+            msg: '没有登录'
+        };
+    }
+    return res;
 }
 
 function errCallback(e) {
@@ -46,37 +107,34 @@ function errCallback(e) {
     const status = e.name;
     if (status === 401) {
         dispatch({
-            type: 'login/logout'
+            type: 'user/logout'
         });
-        return;
+        return e;
     }
     if (status === 403) {
-        dispatch(routerRedux.push('/403'));
-        return;
+        dispatch(routerRedux.push('/exception/403'));
+        return e;
     }
     if (status <= 504 && status >= 500) {
-        dispatch(routerRedux.push('/500'));
-        return;
+        dispatch(routerRedux.push('/exception/500'));
+        return e;
     }
     if (status >= 404 && status < 422) {
-        dispatch(routerRedux.push('/404'));
+        dispatch(routerRedux.push('/exception/404'));
+        return e;
     }
 }
 
 /**
  * Requests a URL, returning a promise.
  *
- * @param  {string} url       The URL we want to request
- * @param  {object} [options] The options we want to pass to "fetch"
- * @return {object}           An object containing either "data" or "err"
  */
-function fetchData(url, options) {
-    return fetch(url, options)
-        .then(checkStatus)
-        .then(parseJSON)
-        .then(data => data)
-        .catch(errCallback);
-}
+const fetchData = options => {
+    return axios(options)
+        .then(res => checkStatus(res))
+        .then(res => res)
+        .catch(err => errCallback(err));
+};
 
 /**
  * 公用post请求
@@ -84,21 +142,20 @@ function fetchData(url, options) {
  * @param data      请求参数
  */
 
-export const post = (url, params = {}) => {
-    return fetchData(url, {
-        method: 'POST',
-        body: JSON.stringify(params)
-    });
+export const post = (url, {data = {}, params = {}, headers = {}}) => {
+    return fetchData({ method: 'post', url, params, data, headers });
 };
+
 
 /**
  * 公用get请求
  * @param url       接口地址
  * @param params    接口参数
  */
-export const get = url => {
-    return fetchData(url);
+export const get = (url, {params = {}, headers = {}}) => {
+    return fetchData({ method: 'get', url, params, headers });
 };
+    
 
 /**
  * 通用请求接口
@@ -106,6 +163,5 @@ export const get = url => {
  * @param params   search参数
  * @param data     data参数
  */
-export const request = ({fnName, params, data}) => {
-    return http[fnName](params, data);
-}; 
+export const request = ({ fnName, params, data }) => http[fnName]({data, params});
+    

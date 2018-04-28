@@ -8,18 +8,17 @@ export default {
 
     proxy: {
         '/api': {
-            target: 'https://dev.q.sopei.cn',
+            target: 'http://dev.test.cn',
             changeOrigin: true,
             pathRewrite: { '^/api': '/api' }
         }
-        // '/api/user': {
-        //     target: 'https://dev.q.sopei.cn',
-        //     changeOrigin: true,
-        //     pathRewrite: { '^/api/user': '/api/user' }
-        // }
     },
 
     theme: {
-        // '@primary-color': '#1DA57A'
+        '@primary-color': '#1a82d2'
+    },
+    hash: true,
+    html: {
+        template: './src/index.ejs'
     }
 };

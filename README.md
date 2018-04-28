@@ -1,23 +1,32 @@
+### Created by Atao on 2018/4/12.
+
 ## 框架组成
 - `dva` [数据 + 状态管理redux + 路由 + 工具] (dva底层引入了redux-sagas做异步流程控制)
 - `antd` (或mobile)[UI视图]
 - UI文档
     - pc[https://ant.design/index-cn]
     - mobile[https://mobile.ant.design/index-cn]
-    - UI风格可参考 antd pro [https://preview.pro.ant.design](没有采用此框架，使用umi更灵活)
+    - UI风格可参考 antd pro [https://preview.pro.ant.design](没有采用此框架，使用自定义的dev配置更灵活)
 
 ## 文件说明
 - /public 可放置静态资源文件 (如/public/static/img/nopic.png，页面可直接引用<img src="static/img/nopic.png" alt="" />)
 - /assets 可导入的资源文件
-- /routes 路由页面
-- /components 组件页面
+- /layouts 父级路由布局
+- /routes 路由页面组件
+- /components 控件组件
+- /common 通用配置
 - /models 数据模型
 - /services http封装以及api接口
 - /utils  通用工具
 - /index.js 入口文件
-- /router.js 一级路由配置
+- /router.js 顶级路由配置
 - /index.css 全局样式配置
 - /mock 模拟接口
+- 其他配置文件
+    - .eslintrc 自定义eslint校验规则
+    - .webpackrc.js 可覆盖webpack配置
+    - .roadhogrc.mock mock接口配置
+    - .editorconfig 编辑器规则配置
 
 ### babel-plugin-import 是用来按需加载 antd 的脚本和样式
 ```
@@ -36,7 +45,7 @@
 ```
     proxy: {
         '/api': {
-            target: 'https://portal.sopei.cn/',
+            target: 'https://api.test.cn/',
             changeOrigin: true,
             pathRewrite: { '^/api': '' }
         }
@@ -107,57 +116,78 @@ App.propTypes = {
 ### 配置antd主题 theme
 - .webpackrc（JSON 格式）或 .webpackrc.js（ES 6 语法）中配置
 ```
-"theme": {
-  "@primary-color": "#1DA57A"
-}
-// 或者，
-"theme": "./theme-config.js"
-// 注意，如果修改默认主题配置，style: 'css'，需要改变为style:true
+    "theme": {
+    "@primary-color": "#1DA57A"
+    }
+    // 或者，
+    "theme": "./theme-config.js"
+    // 注意，如果修改默认主题配置，style: 'css'，需要改变为style:true
 ```
 
 ### 使用异步路由加载组件, 通过（dva/dynamic）实现
 ```
-// 例子
-import React from 'react';
-import dynamic from 'dva/dynamic';
-import { Router, Route, Switch } from 'dva/router';
+    // 例子
+    import React from 'react';
+    import dynamic from 'dva/dynamic';
+    import { Router, Route, Switch } from 'dva/router';
 
 
-function RouterConfig({ history, app }) {
-    const IndexPage = dynamic({
-        app,
-        component: () => import('./routes/IndexPage')
-    });
-    const Products = dynamic({
-        app,
-        models: () => [import('./models/products')],  // 注意： models返回的是一个数组
-        component: () => import('./routes/Products')
-    });
-    return (
-        <Router history={history}>
-            <Switch>
-                <Route path="/" exact component={IndexPage} />
-                <Route path="/products" exact component={Products} />
-            </Switch>
-        </Router>
-    );
-}
-export default RouterConfig;
+    function RouterConfig({ history, app }) {
+        const IndexPage = dynamic({
+            app,
+            component: () => import('./routes/IndexPage')
+        });
+        const Products = dynamic({
+            app,
+            models: () => [import('./models/products')],  // 注意： models返回的是一个数组
+            component: () => import('./routes/Products')
+        });
+        return (
+            <Router history={history}>
+                <Switch>
+                    <Route path="/" exact component={IndexPage} />
+                    <Route path="/products" exact component={Products} />
+                </Switch>
+            </Router>
+        );
+    }
+    export default RouterConfig;
 
 ```
 
 ### Redux connect参数
 ```
-connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
+    connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 ```
 
 ## eslint验证(没有加入build时的验证，只是编写代码时验证)
 ```
-// 某些文件关闭eslint检查
-/*eslint-disable*/
-function test() {
-   return true
- }
-// 给某一行js代码关闭eslint检查
-// eslint-disable-next-line
-alert('foo')
+    // 某些文件关闭eslint检查
+    /*eslint-disable*/
+    function test() {
+    return true
+    }
+    // 给某一行js代码关闭eslint检查
+    // eslint-disable-next-line
+    alert('foo')
+```
+
+### 基于 action 进行页面跳转
+- 除 push(location) 外还有更多方法，详见这里[https://github.com/reactjs/react-router-redux#pushlocation-replacelocation-gonumber-goback-goforward]
+```
+    import { routerRedux } from 'dva/router';
+
+    // Inside Effects
+    yield put(routerRedux.push('/logout'));
+
+    // Outside Effects
+    dispatch(routerRedux.push('/logout'));
+
+    // With query
+    routerRedux.push({
+    pathname: '/logout',
+    query: {
+        page: 2,
+    },
+    });
+```

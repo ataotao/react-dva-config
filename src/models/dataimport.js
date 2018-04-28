@@ -1,19 +1,18 @@
 import { request } from '../services';
 
 export default {
-    namespace: 'login',
+    namespace: 'dataimport',
 
     state: {
 
     },
 
     effects: {
-        *fetchLogin({ payload: data }, { call, put }) {
-            return yield call(request, { fnName: 'login', data });
+        *fetchImport({ payload: data }, { call, put }) {
+            return yield call(request, { fnName: 'carmodel_import_liyang', data });
             // yield put({ type: 'changeLoginStatus', status });
         }
     },
-
     reducers: {
 
     },

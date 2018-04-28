@@ -1,10 +1,6 @@
 /**
  * 接口地址配置文件
  */
-const apiUser = '/api/user/v1.0/';
-// const apiUser = '/mock/';
-
-//接口地址
-export const users = apiUser + 'users';
-export const info_mine = apiUser + 'info/mine';
-export const query_feedback = apiUser + 'query/feedback';
+export const login = 'login';
+export const carmodel_import_liyang = 'carmodel/import/liyang';
+export const standardmodel_review = 'http://localhost:8888/mock/standardmodel/review';

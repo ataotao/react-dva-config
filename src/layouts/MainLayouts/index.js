@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Layout, Icon } from 'antd';
+import { connect } from 'dva';
 import { Route, Switch, Redirect } from 'dva/router';
+import { Layout, Icon } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { enquireScreen } from 'enquire-js';
 import { ContainerQuery } from 'react-container-query';
-import classNames from 'classnames';
-import { connect } from 'dva';
 import { getMenuData } from '../../common/menu';
 import NotFound from '../../routes/Exception/404';
 import SiderMenu from '../../components/SiderMenu';
+import MainHeaderLayout from '..//MainHeaderLayout';
+import classNames from 'classnames';
 import styles from './index.less';
 
 const { Header, Content } = Layout;
@@ -44,26 +45,6 @@ class Main extends Component {
         isMobile
     };
 
-    getPageTitle = ()=> {
-        const { routerData, location } = this.props;
-        const { pathname } = location;
-        let title = '搜配 - 审核后台';
-        for (let i = 0; i < routerData.length; i++) {
-            if(routerData[i].path == pathname){
-                title = `${routerData[i].name} - 搜配`;
-                break;
-            }
-        }
-        return title;
-    };
-
-    handleMenuCollapse = collapsed => {
-        this.props.dispatch({
-            type: 'main/changeMainLayoutCollapsed',
-            payload: collapsed,
-        });
-    };
-
     componentWillReceiveProps(nextProps) {
         // console.log('componentWillReceiveProps');
     }
@@ -90,6 +71,26 @@ class Main extends Component {
         });
     }
 
+    getPageTitle = ()=> {
+        const { routerData, location } = this.props;
+        const { pathname } = location;
+        let title = '搜配 - 审核后台';
+        for (let i = 0; i < routerData.length; i++) {
+            if(routerData[i].path == pathname){
+                title = `${routerData[i].name} - 搜配`;
+                break;
+            }
+        }
+        return title;
+    };
+
+    handleMenuCollapse = collapsed => {
+        this.props.dispatch({
+            type: 'main/changeMainLayoutCollapsed',
+            payload: collapsed,
+        });
+    };
+
     render() {
         const { routerData, collapsed, location } = this.props;
         const { isMobile } = this.state;
@@ -99,18 +100,30 @@ class Main extends Component {
             <SiderMenu menuData={getMenuData()} collapsed={collapsed} location={location} isMobile={isMobile} onCollapse={this.handleMenuCollapse}/>
             {/* 右侧布局 */}
             <Layout style={LayoutStyle}>
+                {/* Header */}
                 <Header className={styles.header}>
+                    {isMobile && 
+                    <span>
+                        <span className={classNames(styles['header_logo'], 'iconfont icon-lingxing')}></span>
+                        <span className={styles.divider}></span>
+                    </span>
+                    }
+                    
                     <Icon className={classNames(styles.trigger, 'cur')} type={collapsed ? 'menu-unfold' : 'menu-fold'} onClick={()=>this.handleMenuCollapse(!collapsed)} />
                 </Header>
-                <Content className={styles.content}>
-                    <Switch>
-                        <Route exact path="/" render={() => <Redirect push to="/standardmodel/review" />} /> 
-                        {routerData.map((item, index) => (
-                            <Route path={item.path} exact component={item.component} key={index} />
-                        ))}
-                        <Route render={NotFound} />
-                    </Switch>
-                </Content>
+                <MainHeaderLayout location={location}>
+                    {/* Content */}
+                    <Content className={styles.content}>
+                        <Switch>
+                            <Route exact path="/" render={() => <Redirect push to="/user/login" />} />
+                            {routerData.map((item, index) => (
+                                <Route path={item.path} exact component={item.component} key={index} />
+                            ))}
+                            <Route render={NotFound} />
+                        </Switch>
+                    </Content>
+                </MainHeaderLayout>
+
             </Layout>
         </Layout>;
         return (

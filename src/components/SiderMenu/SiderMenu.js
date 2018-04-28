@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
+import classNames from 'classnames';
+import styles from './index.less';
 const { Sider } = Layout;
 const { SubMenu, Item } = Menu;
+
+const MenuLogo = props => {
+    const { collapsed } = props;
+    return (
+        <div className={styles['menu_logo_box']}>
+            <span className={classNames('iconfont', styles[collapsed ? 'meun_logo_mini' : 'meun_logo'])}></span>
+        </div>
+    );
+};
 
 // 转化路径
 const conversionPath = path => {
@@ -87,6 +98,7 @@ class SiderMenu extends Component {
                 width={200}
                 className={cls}
             >
+                <MenuLogo {...props} />
                 <Menu
                     theme="dark"
                     mode="inline"

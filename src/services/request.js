@@ -1,24 +1,30 @@
-import qs from 'qs';
-import { isEmpty } from '../utils/tools';
-import { get, post } from './index';
+import { post, get } from './index';
 import * as api from './api';
 
+/******************
+ * get
+ ******************/
 /**
- * 拼接带search参数的url
- * @param {*} api
- * @param {*} params
+ * 标准车型列表 {params:{ }}
  */
-const createUrl = (api, params) => {
-    return isEmpty(params) ? api : api + '?' + qs.stringify(params);
+export const standardmodel_review = ({ params }) => {
+    return get(api.standardmodel_review, {params});
+};
+    
+
+/******************
+ * post
+ ******************/
+/**
+ * 登录 {data:{ account, password }}
+ */
+export const login = ({ data }) =>
+    post(api.login, {data});
+
+/**
+ * 导入车型数据
+ */
+export const carmodel_import_liyang = ({ data }) => {
+    return post(api.carmodel_import_liyang, {data});
 };
 
-/**
- * get
- */
-export const users = () => get(createUrl(api.users));
-export const infoMine = params => get(createUrl(api.info_mine, params));
-
-/**
- * post
- */
-export const queryFeedback = (params, data) => post(createUrl(api.query_feedback, params), data);

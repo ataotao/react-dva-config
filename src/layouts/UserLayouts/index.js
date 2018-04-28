@@ -7,7 +7,7 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 
 import NotFound from '../../routes/Exception/404';
-// import styles from './index.less';
+import styles from './index.less';
 
 const { Content } = Layout;
 
@@ -58,7 +58,7 @@ class Main extends Component {
     render() {
         const { routerData } = this.props;
         const layout = <Layout>
-            <Content>
+            <Content className={styles.container}>
                 <Switch>
                     <Route exact path="/user" render={() => <Redirect push to="/user/login" />} /> 
                     {routerData.map((item, index) => (

@@ -1,29 +1,24 @@
+import { request } from '../services';
+
 export default {
     namespace: 'review',
 
     state: {},
 
     effects: {
-        // *fetch({ payload }, { call, put }) {
-        //     // eslint-disable-line
-        //     yield put({ type: 'save' });
-        // }
+        *fetchList({ payload }, { call, put }) {
+            payload = yield call(request, { fnName: 'standardmodel_review', params: payload });
+            yield put({ type: 'savelist', payload });
+        }
     },
 
     reducers: {
-        // save(state, action) {
-        //     return { ...state, ...action.payload };
-        // }
+        savelist(state, action) {
+            return { ...state, list: {...action.payload} };
+        }
     },
     
     subscriptions: {
-        // setup({ history, dispatch }) {
-        //     // 监听 history 变化，当进入 `/` 时触发 `load` action
-        //     return history.listen(({ pathname }) => {
-        //         if (pathname === '/') {
-        //             dispatch({ type: 'load' });
-        //         }
-        //     });
-        // }
+
     }
 };

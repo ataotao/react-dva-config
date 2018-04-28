@@ -1,8 +1,10 @@
 import users from './mock/users';
 import info_mine from './mock/info_mine';
+import standardmodel_review from './mock/standardmodel_review';
 
 
 export default {
+    'GET /mock/standardmodel/review': (req, res) => { res.send(standardmodel_review)},
     // 支持值为 Object 和 Array
     'GET /mock/info/mine': (req, res) => { res.send(info_mine)},
   

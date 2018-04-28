@@ -26,7 +26,7 @@ const user = [
     }
 ];
 
-// 标准车型审核
+// Main
 const main = [
     {
         name: '标准车型',
@@ -35,10 +35,22 @@ const main = [
         models: () => [import('../models/review')]
     },
     {
+        name: '标准车型编辑审核',
+        path: '/standardmodel/review/detail',
+        component: () => import('../routes/Standardmodel/Detail'),
+        models: () => [import('../models/review')]
+    },
+    {
         name: '批量任务',
         path: '/standardmodel/batchtask',
         component: () => import('../routes/Standardmodel/Batchtask'),
         models: () => [import('../models/batchtask')]
+    },
+    {
+        name: '数据导入',
+        path: '/dataimport',
+        component: () => import('../routes/Dataimport'),
+        models: () => [import('../models/dataimport')]
     }
 ];
 // 其他状态

@@ -1,7 +1,9 @@
 export default {
     namespace: 'main',
 
-    state: {},
+    state: {
+        collapsed: false
+    },
 
     effects: {
         // *fetch({ payload }, { call, put }) {
